@@ -1,9 +1,13 @@
+import mascotaManager from "../service/mascota.manager.js";
+
 class MascotasController {
   constructor() {}
 
   async create(req, res) {
     try {
-      res.status(201).json({ stauts: "create-ok" });
+      const data = req.body;
+      await mascotaManager.create(data);
+      res.status(201).json({ objeto: data });
     } catch (e) {
       res.status(500).send(e);
     }
@@ -17,7 +21,9 @@ class MascotasController {
   }
   async getAll(req, res) {
     try {
-      res.status(201).json({ stauts: "getAll-ok" });
+      const mascotas = await mascotaManager.getAll();
+      console.log(mascotas);
+      res.status(200).json(mascotas);
     } catch (e) {
       res.status(500).send(e);
     }
