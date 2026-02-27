@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import express, { urlencoded } from "express";
+import express from "express";
 import router from "./src/routers/index.router.js";
 import dbConnection from "./src/config/db.js";
 const app = express();
