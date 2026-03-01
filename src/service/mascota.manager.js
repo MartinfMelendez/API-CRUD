@@ -1,13 +1,25 @@
 import Mascota from "../models/mascotas.model.js";
 import ApiErrors from "../errors/APIErrors.js";
 import ERROR_MESSAGE from "../errors/errorMessage.js";
+
 class ManagerMascotas {
   constructor(model) {
     this.model = model;
   }
 
   async create(data) {
-    console.log(data);
+    if (data.nombre === "" || data.nombre === undefined) {
+      throw new ApiErrors(ERROR_MESSAGE.FALTA_NOMBRE);
+    }
+    if (data.tipo === "" || data.tipo === undefined) {
+      throw new ApiErrors(ERROR_MESSAGE.FALTA_TIPO);
+    }
+    if (data.raza === "" || data.raza === undefined) {
+      throw new ApiErrors(ERROR_MESSAGE.FALTA_RAZA);
+    }
+    if (isNaN(data.edad) || data.edad < 0) {
+      throw new ApiErrors(ERROR_MESSAGE.ERROR_EDAD);
+    }
     const mascota = await this.model.create(data);
     return mascota.id;
   }
@@ -27,7 +39,22 @@ class ManagerMascotas {
     return mascota;
   }
 
+  async update(id, data) {
+    const mascota = await this.getOne(id);
+    if (!mascota) throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
+    const mascotaActualizada = await this.model.findByIdAndUpdate(id, data, {
+      returnDocument: "after",
+    });
+    return mascotaActualizada;
+  }
+
   async deleted(id) {
+    const exist = await this.getOne(id);
+
+    if (!exist) {
+      throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
+    }
+
     return await this.model.findByIdAndDelete(id);
   }
 }
