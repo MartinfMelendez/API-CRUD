@@ -6,26 +6,35 @@ class MascotasController {
   async create(req, res) {
     try {
       const data = req.body;
+      if (data.nombre === "" || data.nombre === undefined)
+        throw new Error("El nombre no puede estar vacio");
+      if (data.nombre === "" || data.nombre === undefined)
+        throw new Error("El nombre no puede estar vacio");
       await mascotaManager.create(data);
       res.status(201).json({ objeto: data });
     } catch (e) {
       res.status(500).send(e);
     }
   }
-  async getOne(req, res) {
-    try {
-      res.status(201).json({ stauts: "getOne-ok" });
-    } catch (e) {
-      res.status(500).send(e);
-    }
-  }
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     try {
       const mascotas = await mascotaManager.getAll();
-      console.log(mascotas);
       res.status(200).json(mascotas);
     } catch (e) {
-      res.status(500).send(e);
+      next(e);
+    }
+  }
+  async getOne(req, res, next) {
+    try {
+      const { id } = req.params;
+      const mascota = await mascotaManager.getOne(id);
+      res.status(200).json({
+        nombre: mascota.nombre,
+        tipo: mascota.tipo,
+        raza: mascota.raza,
+      });
+    } catch (e) {
+      next(e);
     }
   }
   async update(req, res) {
@@ -37,7 +46,9 @@ class MascotasController {
   }
   async delete(req, res) {
     try {
-      res.status(201).json({ stauts: "delete-ok" });
+      const { id } = req.params;
+      const mascota = await mascotaManager.deleted(id);
+      res.status(201).json({ stauts: "delete-ok", mascotaId: mascota.id });
     } catch (e) {
       res.status(500).send(e);
     }
