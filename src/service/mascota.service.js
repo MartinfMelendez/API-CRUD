@@ -11,16 +11,16 @@ class ManagerMascotas {
     if (!data?.nombre) {
       throw new ApiErrors(ERROR_MESSAGE.FALTA_NOMBRE);
     }
-    if (data.tipo === "" || data.tipo === undefined) {
+    if (!data?.tipo) {
       throw new ApiErrors(ERROR_MESSAGE.FALTA_TIPO);
     }
-    if (data.raza === "" || data.raza === undefined) {
+    if (!data?.raza) {
       throw new ApiErrors(ERROR_MESSAGE.FALTA_RAZA);
     }
     if (isNaN(data.edad) || data.edad < 0) {
       throw new ApiErrors(ERROR_MESSAGE.ERROR_EDAD);
     }
-    if (data.adoptado === "" || data.adoptado === undefined) {
+    if (!data?.adoptado) {
       throw new ApiErrors(ERROR_MESSAGE.ERROR_ADOPCION);
     }
     const mascota = await this.model.create(data);
