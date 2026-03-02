@@ -41,6 +41,8 @@ class MascotasController {
         nombre: mascota.nombre,
         tipo: mascota.tipo,
         raza: mascota.raza,
+        edad: mascota.edad,
+        adoptado: mascota.adoptado,
       });
     } catch (e) {
       next(e);

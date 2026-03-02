@@ -37,14 +37,14 @@ class ManagerMascotas {
   async getOne(id) {
     const mascota = await this.model.findById(id);
     if (!mascota) {
-      throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
+      throw new ApiErrors(ERROR_MESSAGE.ID_NO_ENCONTRADA, 404);
     }
     return mascota;
   }
 
   async update(id, data) {
     const mascota = await this.getOne(id);
-    if (!mascota) throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
+    if (!mascota) throw new ApiErrors(ERROR_MESSAGE.ID_NO_ENCONTRADA, 404);
     const mascotaActualizada = await this.model.findByIdAndUpdate(id, data, {
       returnDocument: "after",
     });
@@ -55,7 +55,7 @@ class ManagerMascotas {
     const exist = await this.getOne(id);
 
     if (!exist) {
-      throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
+      throw new ApiErrors(ERROR_MESSAGE.ID_NO_ENCONTRADA, 404);
     }
 
     return await this.model.findByIdAndDelete(id);
