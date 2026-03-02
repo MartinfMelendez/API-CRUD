@@ -2,6 +2,8 @@ import Mascota from "../models/mascotas.model.js";
 import ApiErrors from "../errors/APIErrors.js";
 import ERROR_MESSAGE from "../errors/errorMessage.js";
 
+import toUpperCaseObj from "../utils/helper.js";
+
 class ManagerMascotas {
   constructor(model) {
     this.model = model;
@@ -20,10 +22,9 @@ class ManagerMascotas {
     if (isNaN(data.edad) || data.edad < 0) {
       throw new ApiErrors(ERROR_MESSAGE.ERROR_EDAD);
     }
-    if (!data?.adoptado) {
-      throw new ApiErrors(ERROR_MESSAGE.ERROR_ADOPCION);
-    }
-    const mascota = await this.model.create(data);
+
+    const dataUpper = toUpperCaseObj(data, []);
+    const mascota = await this.model.create(dataUpper);
     return mascota.id;
   }
   async getAll() {

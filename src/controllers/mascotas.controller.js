@@ -11,14 +11,12 @@ class MascotasController {
       console.log(nombre, tipo, raza, edad, descripcion, adoptado);
 
       const data = await mascotaManager.create({
-        nombre: nombre.toUpperCase(),
-        tipo: tipo.toUpperCase(),
-        raza: raza.toUpperCase(),
+        nombre: nombre,
+        tipo: tipo,
+        raza: raza,
         edad: edad,
-        descripcion: descripcion
-          ? descripcion.toUpperCase()
-          : "sin descripcion",
-        adoptado: adoptado ? adoptado.toLowerCase() : "false",
+        descripcion: descripcion ? descripcion : "sin descripcion",
+        adoptado: adoptado,
       });
       res.status(201).json({ menesaje: "Creado con exito", mascotaId: data });
     } catch (e) {
@@ -37,13 +35,7 @@ class MascotasController {
     try {
       const { id } = req.params;
       const mascota = await mascotaManager.getOne(id);
-      res.status(200).json({
-        nombre: mascota.nombre,
-        tipo: mascota.tipo,
-        raza: mascota.raza,
-        edad: mascota.edad,
-        adoptado: mascota.adoptado,
-      });
+      res.status(200).json({ mascota });
     } catch (e) {
       next(e);
     }
@@ -51,19 +43,17 @@ class MascotasController {
   async update(req, res, next) {
     try {
       const { id } = req.params;
-      const { nombre, tipo, raza, edad, descripcion, adopcion } = req.body;
+      const { nombre, tipo, raza, edad, descripcion, adoptado } = req.body;
       const mascota = await mascotaManager.getOne(id);
       if (!mascota)
         throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
       const newMascota = {
-        nombre: nombre ? nombre.toUpperCase() : mascota.nombre,
-        tipo: tipo ? tipo.toUpperCase() : mascota.tipo,
-        raza: raza ? raza.toUpperCase() : mascota.raza,
+        nombre: nombre ? nombre : mascota.nombre,
+        tipo: tipo ? tipo : mascota.tipo,
+        raza: raza ? raza : mascota.raza,
         edad: edad !== undefined ? edad : mascota.edad,
-        descripcion: descripcion
-          ? descripcion.toUpperCase()
-          : "sin descripcion",
-        adopcion: adopcion,
+        descripcion: descripcion ? descripcion : "sin descripcion",
+        adoptado: adoptado,
       };
 
       const mascotaActualizada = await mascotaManager.update(id, newMascota);
@@ -79,7 +69,7 @@ class MascotasController {
         throw new ApiErrors(ERROR_MESSAGE.FALTA_ID, 400);
       }
       const mascota = await mascotaManager.deleted(id);
-      res.status(201).json({ stauts: "delete-ok", mascotaId: mascota.id });
+      res.status(200).json({ stauts: "delete-ok", mascotaId: mascota.id });
     } catch (e) {
       next(e);
     }

@@ -1,6 +1,7 @@
 import Usuario from "../models/usuarios.model.js";
 import ApiErrors from "../errors/APIErrors.js";
 import ERROR_MESSAGE from "../errors/errorMessage.js";
+import toUpperCaseObj from "../utils/helper.js";
 
 class ManagerUsuarios {
   constructor(model) {
@@ -8,7 +9,8 @@ class ManagerUsuarios {
   }
 
   async create(data) {
-    const usuario = await this.model.create(data);
+    const dataUpper = toUpperCaseObj(data, ["password"]);
+    const usuario = await this.model.create(dataUpper);
     return usuario;
   }
 

@@ -9,7 +9,7 @@ const schema = new Schema(
     raza: { type: String, require: true },
     edad: { type: Number },
     descripcion: { type: String },
-    adoptado: { type: String, require: true },
+    adoptado: { type: Boolean, require: true, default: false },
   },
   { timestamps: true },
 );
