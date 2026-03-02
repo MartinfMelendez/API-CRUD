@@ -8,7 +8,7 @@ class ManagerMascotas {
   }
 
   async create(data) {
-    if (data.nombre === "" || data.nombre === undefined) {
+    if (!data?.nombre) {
       throw new ApiErrors(ERROR_MESSAGE.FALTA_NOMBRE);
     }
     if (data.tipo === "" || data.tipo === undefined) {
@@ -19,6 +19,9 @@ class ManagerMascotas {
     }
     if (isNaN(data.edad) || data.edad < 0) {
       throw new ApiErrors(ERROR_MESSAGE.ERROR_EDAD);
+    }
+    if (data.adoptado === "" || data.adoptado === undefined) {
+      throw new ApiErrors(ERROR_MESSAGE.ERROR_ADOPCION);
     }
     const mascota = await this.model.create(data);
     return mascota.id;

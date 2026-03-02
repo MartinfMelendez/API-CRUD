@@ -1,19 +1,24 @@
 import ApiErrors from "../errors/APIErrors.js";
 import ERROR_MESSAGE from "../errors/errorMessage.js";
-import mascotaManager from "../service/mascota.manager.js";
+import mascotaManager from "../service/mascota.service.js";
 
 class MascotasController {
   constructor() {}
 
   async create(req, res, next) {
     try {
-      const { nombre, tipo, raza, edad } = req.body;
+      const { nombre, tipo, raza, edad, descripcion, adoptado } = req.body;
+      console.log(nombre, tipo, raza, edad, descripcion, adoptado);
 
       const data = await mascotaManager.create({
         nombre: nombre.toUpperCase(),
         tipo: tipo.toUpperCase(),
         raza: raza.toUpperCase(),
         edad: edad,
+        descripcion: descripcion
+          ? descripcion.toUpperCase()
+          : "sin descripcion",
+        adoptado: adoptado ? adoptado.toLowerCase() : "false",
       });
       res.status(201).json({ menesaje: "Creado con exito", mascotaId: data });
     } catch (e) {
@@ -44,7 +49,7 @@ class MascotasController {
   async update(req, res, next) {
     try {
       const { id } = req.params;
-      const { nombre, tipo, raza, edad } = req.body;
+      const { nombre, tipo, raza, edad, descripcion, adopcion } = req.body;
       const mascota = await mascotaManager.getOne(id);
       if (!mascota)
         throw new ApiErrors(ERROR_MESSAGE.MASCOTA_NO_ENCONTRADA, 404);
@@ -53,6 +58,10 @@ class MascotasController {
         tipo: tipo ? tipo.toUpperCase() : mascota.tipo,
         raza: raza ? raza.toUpperCase() : mascota.raza,
         edad: edad !== undefined ? edad : mascota.edad,
+        descripcion: descripcion
+          ? descripcion.toUpperCase()
+          : "sin descripcion",
+        adopcion: adopcion,
       };
 
       const mascotaActualizada = await mascotaManager.update(id, newMascota);

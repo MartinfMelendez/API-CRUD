@@ -1,5 +1,5 @@
 import { Router } from "express";
-import routerMascotas from "./mascotas.js";
+import routerMascotas from "./mascotas.router.js";
 
 const router = Router();
 
