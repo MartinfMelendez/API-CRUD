@@ -36,7 +36,7 @@ class ManagerMascotas {
   }
 
   async getOne(id) {
-    const mascota = await this.model.findById(id);
+    const mascota = await this.model.findById(id).populate("usuarios");
     if (!mascota) {
       throw new ApiErrors(ERROR_MESSAGE.ID_NO_ENCONTRADA, 404);
     }

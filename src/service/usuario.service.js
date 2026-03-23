@@ -16,6 +16,7 @@ class ManagerUsuarios {
 
   async getAll() {
     const usuarios = await this.model.find().select("nombre email");
+
     if (usuarios.length === 0) {
       throw new ApiErrors(ERROR_MESSAGE.NO_HAY_DATOS, 404);
     }

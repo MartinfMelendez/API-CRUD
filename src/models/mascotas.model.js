@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, Types, model } from "mongoose";
 
 let collection = "mascotas";
 
@@ -10,6 +10,7 @@ const schema = new Schema(
     edad: { type: Number },
     descripcion: { type: String },
     adoptado: { type: Boolean, require: true, default: false },
+    dueño: { type: Types.ObjectId, ref: "usuarios", default: null },
   },
   { timestamps: true },
 );

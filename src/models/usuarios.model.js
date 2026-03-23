@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 let collection = "usuarios";
 
@@ -8,6 +8,7 @@ const schema = new Schema(
     email: { type: String, require: true, unique: true },
     password: { type: String, require: true, select: false },
     role: { type: String, default: "user" },
+    mascotas: [{ type: Types.ObjectId, ref: "mascotas" }],
   },
   { timestamps: true },
 );
